@@ -28,6 +28,10 @@ export const shorten = catchError(async (req, res, next) => {
             originalUrl: url,
             shortId: nanoid(10)
         })
+
+        const user = req.user;
+        user.urls.push(foundUrl._id);
+        await user.save();
     }
 
     // newUrl = `${req.protocol}://${req.hostname}${req.baseUrl}/${foundUrl.shortId}`;

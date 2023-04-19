@@ -2,7 +2,6 @@ import mongoose, { Schema } from "mongoose";
 import validator from 'validator';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
-import AppError from "../utils/AppError.js";
 
 const userSchema = new Schema({
     name: {
