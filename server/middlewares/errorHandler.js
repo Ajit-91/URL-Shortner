@@ -2,6 +2,9 @@
 const errorHandler = (err, req, res, next) => {
     let message 
     let statusCode;
+    
+    console.log(err)
+    console.log({code : err.code, name : err.name, message : err.message})
 
     if(err.statusCode) {
         statusCode = err.statusCode
@@ -11,7 +14,7 @@ const errorHandler = (err, req, res, next) => {
         message = Object.values(err.errors).map(val => val.message)
     }else {
         statusCode = 500
-        message = 'Internal Server Error'
+        message = err.message
     }
 
     return res.status(statusCode).json({

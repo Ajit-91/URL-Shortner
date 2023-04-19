@@ -1,8 +1,10 @@
 import { Router } from "express";
+import isAuthenticated from "../middlewares/isAuthenticated.js";
 
 const router = Router();
 
-router.get("/shorten", (req, res) => {
+router.post("/shorten", isAuthenticated, (req, res) => {
+    
   res.send("hello world  ");
 });
 

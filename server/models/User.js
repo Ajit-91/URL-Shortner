@@ -1,5 +1,8 @@
 import mongoose, { Schema } from "mongoose";
 import validator from 'validator';
+import bcrypt from 'bcryptjs';
+import jwt from 'jsonwebtoken';
+import AppError from "../utils/AppError.js";
 
 const userSchema = new Schema({
     name: {
@@ -49,6 +52,25 @@ userSchema.path('password').validate((value) => {
         throw new Error('Password must be at least 6 characters long and must contain at least one lowercase letter, one uppercase letter and one special character')
     }
 })
+
+
+
+// --------Hashing password (While Register)------------------------
+userSchema.pre('save', async function (next) {
+    if (this.isModified('password')) {
+        this.password = await bcrypt.hash(this.password, 10)
+    }
+    next();
+})
+
+
+// --------generatingToken----------------------------
+
+userSchema.methods.getToken = function () {
+    return jwt.sign({ _id: this._id }, process.env.JWT_SECRET, {
+        expiresIn: Math.floor(Date.now() / 1000) + process.env.JWT_EXPIRE * 24 * 60 * 60
+    })
+}
 
 
 
