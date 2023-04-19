@@ -20,7 +20,7 @@ const isAuthenticated = catchError(async (req, res, next) => {
     }
 
     const user = await User.findById(decodedData._id)
-    console.log(user)
+    console.log({authUser : user})
     if (!user) {
         return next(new AppError(401, 'Not authorized to access this route'))
     }

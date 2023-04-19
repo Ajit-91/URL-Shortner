@@ -1,7 +1,7 @@
 import mongoose, { Schema } from "mongoose";
 
 const ShortUrlSchema = new Schema({
-    shortUrl : {
+    shortId : {
         type: String,
         required: true,
         trim: true,
