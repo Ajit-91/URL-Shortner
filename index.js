@@ -3,6 +3,9 @@ import express, { json, urlencoded } from 'express'
 import cors from 'cors'
 import { mongoose } from 'mongoose'
 import errorHandler from './server/middlewares/errorHandler.js'
+import urlRoutes from './server/routes/urlRoutes.js'
+import userRoutes from './server/routes/userRoutes.js'
+
 const app = express()
 
 dotenv.config()
@@ -23,6 +26,10 @@ app.use(cors({ origin: true, credentials: true }))
 
 
 //  -----------Routes-----------------------------
+
+
+app.use('/api/v1/url', urlRoutes)
+app.use('/api/v1/user', userRoutes)
 
 //  -----------Routes-----------------------------
 
