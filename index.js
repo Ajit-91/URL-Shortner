@@ -26,19 +26,18 @@ app.use(cors({ origin: true, credentials: true }))
 
 
 //  -----------Routes-----------------------------
-
-
 app.use('/api/v1/url', urlRoutes)
 app.use('/api/v1/user', userRoutes)
 
-//  -----------Routes-----------------------------
 
 app.get('/', (req, res)=>{
-    res.send('Hello World')
+    res.send('URL Shortener API')
 })
+//  -----------Routes-----------------------------
+
+
 
 // ----------Error Handler------------------------
-
 app.use(errorHandler);
 
 
