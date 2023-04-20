@@ -5,7 +5,7 @@ import AppError from "../utils/AppError.js";
 import redisClient from "../config/redisClient.js";
 
 
-export const shorten = catchError(async (req, res, next) => {
+export const shorten = catchError(async (req, res) => {
     const { url } = req.body;
     if (!url) {
         throw new AppError(400, 'Please provide a url')
@@ -51,7 +51,7 @@ export const shorten = catchError(async (req, res, next) => {
     if(typeof foundUrl === 'string'){ // foundUrl will be string in case of cache hit
         foundUrl = JSON.parse(foundUrl)
     }
-    
+
     let newUrl = `${process.env.ROOT_URL}${req.baseUrl}/${foundUrl.shortId}`;
 
     // close the connection
@@ -66,7 +66,7 @@ export const shorten = catchError(async (req, res, next) => {
 })
 
 
-export const redirect = catchError(async (req, res, next) => {
+export const redirect = catchError(async (req, res) => {
     const { shortId } = req.params;
     if (!shortId) {
         throw new AppError(400, 'Please provide a short url')

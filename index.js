@@ -1,4 +1,6 @@
 import dotenv from 'dotenv'
+dotenv.config()
+
 import express, { json, urlencoded } from 'express'
 import cors from 'cors'
 import { mongoose } from 'mongoose'
@@ -8,7 +10,6 @@ import userRoutes from './server/routes/userRoutes.js'
 
 const app = express()
 
-dotenv.config()
 // connecting to db
 mongoose.connect(process.env.DB_URI).then(()=>{
     console.log('connection succesfull')
