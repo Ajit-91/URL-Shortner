@@ -8,7 +8,9 @@ const createShortUrlLimiter = rateLimit({
     return req.user._id.toString(); // use the user ID as the rate limiting key
   },
   handler: (req, res, next) => {
-    return next(new AppError(429, "Max limit (10 per Hour) for creating short url exceeded, please try again after an hour"));
+    return next(new AppError(429, 
+      `Max limit for creating short url (${process.env.URL_CREATION_LIMIT} per Hour) exceeded, please try again after an hour`
+      ));
   },
 });
 
