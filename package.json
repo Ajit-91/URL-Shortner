@@ -18,6 +18,7 @@
     "jsonwebtoken": "^9.0.0",
     "mongoose": "^7.0.4",
     "nanoid": "^4.0.2",
+    "redis": "^4.6.5",
     "validator": "^13.9.0"
   }
 }

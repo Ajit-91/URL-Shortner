@@ -2,6 +2,8 @@ import catchError from "../utils/catchError.js";
 import { nanoid } from 'nanoid'
 import ShortUrl from "../models/ShortUrl.js";
 import AppError from "../utils/AppError.js";
+import redisClient from "../config/redisClient.js";
+
 
 export const shorten = catchError(async (req, res, next) => {
     const { url } = req.body;
@@ -11,11 +13,18 @@ export const shorten = catchError(async (req, res, next) => {
     //fetch URL if it exists in cache ~ else in the database ~ 
     //else create, store, cache a newly generated URL
 
+    await redisClient.connect();
 
-    let foundUrl, newUrl
+    let foundUrl
+
     // check in cache
+    foundUrl = await redisClient.get(url);
 
-
+    if(foundUrl){
+        console.log('cache hit')
+    }else{
+        console.log('cache miss')
+    }
 
     if (!foundUrl) {
         // check in database
@@ -23,7 +32,7 @@ export const shorten = catchError(async (req, res, next) => {
     }
 
     if (!foundUrl) {
-        // create new url if not foundUrl
+        // create new url if not found in db
         foundUrl = await ShortUrl.create({
             originalUrl: url,
             shortId: nanoid(10)
@@ -34,15 +43,19 @@ export const shorten = catchError(async (req, res, next) => {
         await user.save();
     }
 
-    // newUrl = `${req.protocol}://${req.hostname}${req.baseUrl}/${foundUrl.shortId}`;
-    newUrl = `${req.protocol}://${req.hostname}`;
-    if (req.hostname === 'localhost' && req.port !== '80' && req.port !== '443') {
-        newUrl += `:${req.socket.localPort}`;
+    if(typeof foundUrl !== 'string'){ // foundUrl will be object in case of cache miss
+          // store in cache
+          await redisClient.set(url, JSON.stringify(foundUrl));
     }
-    newUrl += `${req.baseUrl}/${foundUrl.shortId}`;
-    console.log({ protocol: req.protocol, hostname: req.hostname, baseUrl: req.baseUrl , port : req.socket.localPort})
 
-    // cache the found url
+    if(typeof foundUrl === 'string'){ // foundUrl will be string in case of cache hit
+        foundUrl = JSON.parse(foundUrl)
+    }
+    
+    let newUrl = `${process.env.ROOT_URL}${req.baseUrl}/${foundUrl.shortId}`;
+
+    // close the connection
+    await redisClient.disconnect();
 
 
     res.status(200).json({

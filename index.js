@@ -33,7 +33,9 @@ app.use('/api/v1/user', userRoutes)
 
 //  -----------Routes-----------------------------
 
-
+app.get('/', (req, res)=>{
+    res.send('Hello World')
+})
 
 // ----------Error Handler------------------------
 
