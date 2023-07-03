@@ -19,8 +19,8 @@ const PORT = process.env.PORT || 8000
 
 
 // ----------MiddleWares--------------------------
-app.use(json())
-app.use(urlencoded({extended : true}))
+app.use(json()) // parses JSON string and converts it into JS Object and attaches to req.body
+app.use(urlencoded({extended : true})) // parses URL-encoded data and converts it into JS Object and attaches to req.body
 app.use(cors({ origin: true, credentials: true }))
 // ----------MiddleWares--------------------------
 
